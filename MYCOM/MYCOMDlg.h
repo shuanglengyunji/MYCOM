@@ -61,4 +61,5 @@ public:
 	void OnCommMscomm();
 	afx_msg void OnBnClickedMessage1();
 	afx_msg void OnBnClickedCancel();
+	afx_msg void OnBnClickedMessaage2();
 };

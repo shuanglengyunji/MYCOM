@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CMYCOMDlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_PORTNUM_OUT, &CMYCOMDlg::OnCbnSelchangePortnumOut)
 	ON_BN_CLICKED(IDC_MESSAGE1, &CMYCOMDlg::OnBnClickedMessage1)
 	ON_BN_CLICKED(IDCANCEL, &CMYCOMDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDC_MESSAAGE2, &CMYCOMDlg::OnBnClickedMessaage2)
 END_MESSAGE_MAP()
 
 
@@ -117,6 +118,15 @@ HCURSOR CMYCOMDlg::OnQueryDragIcon()
 
 //*********************************************************************
 //控件相关函数
+
+void CMYCOMDlg::OnBnClickedCancel()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	//退出按钮
+	FreeConsole();	//关闭控制台
+	CDialogEx::OnCancel();
+}
 
 //下拉列表初始化
 void CMYCOMDlg::InitComboBox()
@@ -482,32 +492,34 @@ void CMYCOMDlg::OnCommMscommOut()
 void CMYCOMDlg::OnBnClickedMessage1()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	BYTE Head1 = 0xAA;				//帧头1
-	BYTE Head2 = 0xAF;				//帧头2
-	BYTE Functionword = 0x01;		//功能字
-	BYTE Len = 0x01;				//长度
-	BYTE Command_Number = 0x02;	//内部指令号
-	BYTE SUM = Head1+Head2+Functionword+Len+Command_Number;
+	MYCOMMAND a;	//能够发生1-4位参数
 
-	CByteArray SendArray;
-	SendArray.RemoveAll();
-	SendArray.SetSize(6);		//总长度7字节：帧头（2） + 功能字（1） + 长度（1）+ 指令（2）+ 总和校验（1）
-	SendArray.SetAt(0,Head1);	//帧头
-	SendArray.SetAt(1,Head2);	//帧头
-	SendArray.SetAt(2,Functionword);	//功能字
-	SendArray.SetAt(3,Len);	//长度（指令长度2字节）
-	SendArray.SetAt(4,Command_Number);	//指令内部编号
-	SendArray.SetAt(5,SUM);
+	a.Updata(0xAA,0xAF,0x00,0x01);
+	a.Send_To_InputComm();
 
-	OutputComm.put_Output(COleVariant(SendArray));	//发送到Input口（飞控口）
+	a.Updata(0xAA,0xAF,0x00,0x01,0x02);
+	a.Send_To_InputComm();
+
+	a.Updata(0xAA,0xAF,0x00,0x01,0x02,0x03);
+	a.Send_To_InputComm();
+
+	a.Updata(0xAA,0xAF,0x00,0x01,0x02,0x03,0x04);
+	a.Send_To_InputComm();
 }
 
-
-void CMYCOMDlg::OnBnClickedCancel()
+void CMYCOMDlg::OnBnClickedMessaage2()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	MYCOMMAND a;	//能够发生1-4位参数
+	a.Updata(0xAA,0xAF,0x00,0x01);
+	a.Send_To_OutputComm();
 
-	//退出按钮
-	FreeConsole();	//关闭控制台
-	CDialogEx::OnCancel();
+	a.Updata(0xAA,0xAF,0x00,0x01,0x02);
+	a.Send_To_OutputComm();
+
+	a.Updata(0xAA,0xAF,0x00,0x01,0x02,0x03);
+	a.Send_To_OutputComm();
+
+	a.Updata(0xAA,0xAF,0x00,0x01,0x02,0x03,0x04);
+	a.Send_To_OutputComm();
 }

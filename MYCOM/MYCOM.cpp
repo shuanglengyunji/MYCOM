@@ -37,7 +37,7 @@ CMYCOMApp theApp;
 
 
 // CMYCOMApp 初始化
-
+CMYCOMDlg* mydlg;
 BOOL CMYCOMApp::InitInstance()
 {
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
@@ -70,6 +70,7 @@ BOOL CMYCOMApp::InitInstance()
 
 	CMYCOMDlg dlg;
 	m_pMainWnd = &dlg;
+	mydlg = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
