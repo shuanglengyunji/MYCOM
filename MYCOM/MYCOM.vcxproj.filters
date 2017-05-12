@@ -42,6 +42,9 @@
     <ClInclude Include="CMSComm.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MYCOMMAND.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MYCOM.cpp">
@@ -54,6 +57,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CMSComm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MYCOMMAND.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

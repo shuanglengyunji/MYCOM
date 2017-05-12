@@ -4,6 +4,7 @@
 
 #include "math.h"
 #include "CMSComm.h"
+#include "Resource.h"
 
 #pragma once
 
@@ -50,8 +51,6 @@ public:
 	void OutputReceiveHandle(BYTE data);
 	int outputCommstatus;
 	int outputPortNum;
-
-	
 
 	afx_msg void OnBnClickedComopen();
 	afx_msg void OnCbnSelchangeBaudrate();

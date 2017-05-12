@@ -6,6 +6,7 @@
 #include "MYCOM.h"
 #include "MYCOMDlg.h"
 #include "afxdialogex.h"
+#include "MYCOMMAND.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -480,19 +481,22 @@ void CMYCOMDlg::OnCommMscommOut()
 void CMYCOMDlg::OnBnClickedMessage1()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	BYTE Command_Number;
-
+	BYTE Head1 = 0xAA;				//帧头1
+	BYTE Head2 = 0xAF;				//帧头2
+	BYTE Functionword = 0x01;		//功能字
+	BYTE Len = 0x01;				//长度
+	BYTE Command_Number = 0x02;	//内部指令号
+	BYTE SUM = Head1+Head2+Functionword+Len+Command_Number;
 
 	CByteArray SendArray;
 	SendArray.RemoveAll();
-	SendArray.SetSize(7);		//总长度7字节：帧头（2） + 功能字（1） + 长度（1）+ 指令（2）+ 总和校验（1）
-	SendArray.SetAt(0,0xAA);	//帧头
-	SendArray.SetAt(1,0xAF);	//帧头
-	SendArray.SetAt(2,0xB0);	//功能字
-	SendArray.SetAt(3,0x02);	//长度（指令长度2字节）
-	SendArray.SetAt(4,0x00);	//指令内部编号
-	SendArray.SetAt(5,0x00);	//指令内容数据
-	SendArray.SetAt(6,0x00);
-	OutputComm.put_Output(COleVariant(SendArray));
-	InputComm.put_Output(COleVariant(SendArray));
+	SendArray.SetSize(6);		//总长度7字节：帧头（2） + 功能字（1） + 长度（1）+ 指令（2）+ 总和校验（1）
+	SendArray.SetAt(0,Head1);	//帧头
+	SendArray.SetAt(1,Head2);	//帧头
+	SendArray.SetAt(2,Functionword);	//功能字
+	SendArray.SetAt(3,Len);	//长度（指令长度2字节）
+	SendArray.SetAt(4,Command_Number);	//指令内部编号
+	SendArray.SetAt(5,SUM);
+
+	OutputComm.put_Output(COleVariant(SendArray));	//发送到Input口（飞控口）
 }
