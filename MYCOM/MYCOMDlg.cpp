@@ -370,6 +370,17 @@ void CMYCOMDlg::OnBnClickedComopen()
 	GetDlgItem(ID_COMOPEN)->SetWindowText("关闭串口");
 }
 
+void CMYCOMDlg::InputReceiveHandle(BYTE data)
+{
+	printf("飞控：%x\n",data);
+
+}
+
+void CMYCOMDlg::OutputReceiveHandle(BYTE data)
+{
+	printf("地面站：%x\n",data);
+}
+
 BEGIN_EVENTSINK_MAP(CMYCOMDlg, CDialogEx)
 	ON_EVENT(CMYCOMDlg, IDC_MSCOMM_OUT, 1, CMYCOMDlg::OnCommMscommOut, VTS_NONE)
 	ON_EVENT(CMYCOMDlg, IDC_MSCOMM, 1, CMYCOMDlg::OnCommMscomm, VTS_NONE)
@@ -400,15 +411,21 @@ void CMYCOMDlg::OnCommMscomm()
 		len = safeinput.GetOneDimSize();	//获取长度
 		for(long k=0;k<len;k++)				//将输入数据存入数组rxdata
 			safeinput.GetElement(&k,rxdata+k);
-
-		printf("对飞控串口接收到：\n");
+		
+		//转发
 		SendArray.SetSize(len);
 		for(int k=0;k<len;k++)
 		{
-			printf("%x\n",*(rxdata+k));
 			SendArray.SetAt(k,*(rxdata+k));
 		}
-		OutputComm.put_Output(COleVariant(SendArray));
+		OutputComm.put_Output(COleVariant(SendArray));	//转发到output口
+
+		//数据处理
+		for(int k=0;k<len;k++)
+		{
+			InputReceiveHandle(*(rxdata+k));
+		}
+
 		break;
 	default:
 		printf("InputComm Event,NO.%d\n",num);
@@ -440,14 +457,20 @@ void CMYCOMDlg::OnCommMscommOut()
 		for(long k=0;k<len;k++)				//将输入数据存入数组rxdata
 			safeinput.GetElement(&k,rxdata+k);
 
-		printf("对地面站串口接收到：\n");
+		//数据转发
 		SendArray.SetSize(len);
 		for(int k=0;k<len;k++)
 		{
-			printf("%x\n",*(rxdata+k));
 			SendArray.SetAt(k,*(rxdata+k));
 		}
-		InputComm.put_Output(COleVariant(SendArray));
+		InputComm.put_Output(COleVariant(SendArray));	//转发到input口
+
+		//数据处理
+		for(int k=0;k<len;k++)
+		{
+			OutputReceiveHandle(*(rxdata+k));
+		}
+
 		break;
 	default:
 		printf("OutputComm Event,NO.%d\n",num);

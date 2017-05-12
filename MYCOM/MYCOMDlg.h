@@ -40,14 +40,18 @@ public:
 	//数据输入串口（对飞控）
 	CMSComm InputComm;
 	int InputCommInit(void);
+	void InputReceiveHandle(BYTE data);
 	int inputCommstatus;
 	int inputPortNum;
 	
 	//对地面站输出串口
 	CMSComm OutputComm;
 	int OutputCommInit(void);
+	void OutputReceiveHandle(BYTE data);
 	int outputCommstatus;
 	int outputPortNum;
+
+	
 
 	afx_msg void OnBnClickedComopen();
 	afx_msg void OnCbnSelchangeBaudrate();
