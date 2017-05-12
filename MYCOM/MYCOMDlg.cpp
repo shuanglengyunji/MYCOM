@@ -480,12 +480,19 @@ void CMYCOMDlg::OnCommMscommOut()
 void CMYCOMDlg::OnBnClickedMessage1()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	BYTE Command_Number;
+
+
 	CByteArray SendArray;
 	SendArray.RemoveAll();
-	SendArray.SetSize(3);
-	SendArray.SetAt(0,12);
-	SendArray.SetAt(1,79);
-	SendArray.SetAt(2,0xe2);
+	SendArray.SetSize(7);		//总长度7字节：帧头（2） + 功能字（1） + 长度（1）+ 指令（2）+ 总和校验（1）
+	SendArray.SetAt(0,0xAA);	//帧头
+	SendArray.SetAt(1,0xAF);	//帧头
+	SendArray.SetAt(2,0xB0);	//功能字
+	SendArray.SetAt(3,0x02);	//长度（指令长度2字节）
+	SendArray.SetAt(4,0x00);	//指令内部编号
+	SendArray.SetAt(5,0x00);	//指令内容数据
+	SendArray.SetAt(6,0x00);
 	OutputComm.put_Output(COleVariant(SendArray));
 	InputComm.put_Output(COleVariant(SendArray));
 }
