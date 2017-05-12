@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CMYCOMDlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_PORTNUM, &CMYCOMDlg::OnCbnSelchangePortnum)
 	ON_CBN_SELCHANGE(IDC_PORTNUM_OUT, &CMYCOMDlg::OnCbnSelchangePortnumOut)
 	ON_BN_CLICKED(IDC_MESSAGE1, &CMYCOMDlg::OnBnClickedMessage1)
+	ON_BN_CLICKED(IDCANCEL, &CMYCOMDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
@@ -499,4 +500,14 @@ void CMYCOMDlg::OnBnClickedMessage1()
 	SendArray.SetAt(5,SUM);
 
 	OutputComm.put_Output(COleVariant(SendArray));	//发送到Input口（飞控口）
+}
+
+
+void CMYCOMDlg::OnBnClickedCancel()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	//退出按钮
+	FreeConsole();	//关闭控制台
+	CDialogEx::OnCancel();
 }

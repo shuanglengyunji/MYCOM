@@ -72,7 +72,7 @@ void MYCOMMAND::Send_To_InputComm()
 	SendArray.SetAt(5,Command_Data);	//指令内容数据
 	SendArray.SetAt(6,SUM);
 
-	this->InputComm.put_Output(COleVariant(SendArray));	//发送到Input口（飞控口）
+	InputComm.put_Output(COleVariant(SendArray));	//发送到Input口（飞控口）
 }
 
 //向地面站发送指令
@@ -88,6 +88,6 @@ void MYCOMMAND::Send_To_OutputComm()
 	SendArray.SetAt(4,Command_Number);	//指令内部编号
 	SendArray.SetAt(5,Command_Data);	//指令内容数据
 	SendArray.SetAt(6,SUM);
-	this->OutputComm.put_Output(COleVariant(SendArray));	//发送到Input口（飞控口）
+	OutputComm.put_Output(COleVariant(SendArray));	//发送到Input口（飞控口）
 }
 
